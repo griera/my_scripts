@@ -1,5 +1,16 @@
 #!/bin/bash
 
+#
+# my_git_status_all.sh:
+# 
+# Usage: my_git_status_all.sh
+# 
+# Outputs the current status of all GitHub local repositories.
+#
+# Exit status:
+#  · 0 -> Success
+#
+
 function print_hyphens() {
     num_chars="$(echo "$1" | wc -m)"
     num_side_hyphens=$(( (82 - ${num_chars} - 1) / 2))
@@ -35,7 +46,10 @@ rm ${TMP_FILE}
 if [ "x${REPOS_MOD}" = "x" ] ; then
     echo "All your repositories are clean"
 else
-    echo "The following repositories have changed:"${REPOS_MOD}""
+    echo "The following repositories have changed:"
+    for i in $(echo ${REPOS_MOD}) ; do
+        echo ${i}
+    done
 fi
-exit
+exit 0
 
