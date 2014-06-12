@@ -2,7 +2,7 @@
 
 # my_bak_nexus5.sh:
 #
-# Usage: my_bak_nexus5.sh [-d]
+# Usage: my_bak_nexus5.sh [-d] [-r]
 #
 # Copies the most recent backup of systems+user apps and data made by
 # Titanium Backup app from my Nexus 5 to my desktop computer.
@@ -14,7 +14,7 @@
 #
 
 function usage () {
-    echo -e "Usage: $0 [-d]\n"
+    echo -e "Usage: $0 [-d] [-r]\n"
     echo -e "More information can be found by reading the script file."
     exit 1
 }
@@ -26,7 +26,6 @@ NEXUS5_PATH="${HOME}/my_links/Nexus5"
 if [[ $# -gt 2 || ($# -eq 1 && ($1 != "-d" && $1 != "-r")) || ($# -eq 2 && ($1 != "-d" || $2 != "-r")) ]] ; then
     usage
 fi
-
 
 # Variable that defines debug mode status
 DBG=0
