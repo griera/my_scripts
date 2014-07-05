@@ -7,6 +7,8 @@
 # Copies the most recent backup of systems+user apps and data made by
 # Titanium Backup app from my Nexus 5 to my desktop computer.
 #
+# IMPORTANT NOTE: It's needed to restart Nexus 5 before starting the backup process!
+#
 # Exit status:
 # · 0 -> Success
 # · 1 -> Fail (bad function usage, wrong number or defined argument. etc.)
