@@ -5,14 +5,16 @@
 # Usage: my_bak_nexus5.sh [-d] [-r]
 #
 # Copies the most recent backup of systems+user apps and data made by
-# Titanium Backup app from my Nexus 5 to my desktop computer.
+# Titanium Backup app from my Nexus 5 to my desktop computer. Also saves
+# the backup if it's locate on my personal pen drive.
 #
-# IMPORTANT NOTE: It's needed to restart Nexus 5 before starting the backup process!
+# IMPORTANT NOTE: It's needed to restart Nexus 5 before starting the backup
+# process!
 #
 # Exit status:
 # · 0 -> Success
 # · 1 -> Fail (bad function usage, wrong number or defined argument. etc.)
-# · 2 -> Nexus 5 is not connected to the computer
+# · 2 -> Neither Nexus 5 nor pen drive are not connected to the computer
 #
 
 function usage () {
@@ -23,6 +25,7 @@ function usage () {
 
 OUTPUT_DIR="${HOME}/my_links/Smartphones/Nexus_5/TitaniumBackup/"
 NEXUS5_PATH="${HOME}/my_links/Nexus5"
+PEN_DRIVE_PATH="${HOME}/my_links/GENIS_DATA1"
 
 # Checks user parameters
 if [[ $# -gt 2 || ($# -eq 1 && ($1 != "-d" && $1 != "-r")) || ($# -eq 2 && ($1 != "-d" || $2 != "-r")) ]] ; then
@@ -47,26 +50,45 @@ if [ "$1" = "-r" ] ; then
     shift 1
 fi
 
-# Checks if Nexus 5 is connected to the computer
+# Checks if either Nexus 5 or pen drive are connected to the computer
 NEXUS5_LINK="$(ls -l ${NEXUS5_PATH} | cut -d '>' -f2 | sed 's/^ *//')"
+PEN_DRIVE_LINK="$(ls -l ${PEN_DRIVE_PATH} | cut -d '>' -f2 | sed 's/^ *//')"
+SELECTED_PATH="${NEXUS5_PATH}"
+SELECTED_SOURCE="Nexus 5"
 if [ ! -e "${NEXUS5_LINK}" ] ; then
-    echo "Nexus 5 is not connected. Please plug it into your computer and executes the script again"
-    exit 2
+    echo -n "WARNING: ${SELECTED_SOURCE} is not connected. "
+    SELECTED_PATH="${PEN_DRIVE_PATH}"
+    SELECTED_SOURCE="pen dirve"
+    echo "Trying to connect to ${SELECTED_SOURCE} instead..."
+    if [ ! -e "${PEN_DRIVE_LINK}" ] ; then
+        echo "WARNING: ${SELECTED_SOURCE} is not connected, too."
+        echo "Please plug Nexus 5 or pen drive into your computer and executes the script again."
+        exit 2
+    fi
 fi
 
-# Checks if Nexus 5 has a backup made by Titanium Backup
-TBAK_PATH="${NEXUS5_PATH}/TitaniumBackup/"
-if [ "$(ls -la ${TBAK_PATH} | wc -l)" -le 3 ] ; then
-    echo "There isn't any backup made Titanium Backup on Nexus 5."
-    echo "The copy will not be performed. Exiting."
-    exit 0
+# Checks if the selected source (Nexus 5 or pen drive) has a backup made by Titanium Backup
+TBAK_PATH="${SELECTED_PATH}/TitaniumBackup/"
+if [ ${DBG} -eq 1 ] ; then
+    if [ "$(ls -la ${TBAK_PATH} | wc -l)" -le 3 ] ; then
+        echo "There isn't any backup made by Titanium Backup on ${SELECTED_SOURCE}."
+        echo "The copy will not be performed. Exiting."
+        exit 0
+    fi
+else
+    if [ "$(ls -la ${TBAK_PATH} 2> /dev/null | wc -l)" -le 3 ] ; then
+        echo "There isn't any backup made by Titanium Backup on ${SELECTED_SOURCE}."
+        echo "The copy will not be performed. Exiting."
+        exit 0
+    fi
 fi
 
 LAST_DATE_BAK="$(ls -l --full-time ${TBAK_PATH} | tr -s ' ' | cut -d ' ' -f6 | sort | uniq | tail -n 1)"
 PREFIX="backup_Nexus5"
 BAK_NAME="${PREFIX}_${LAST_DATE_BAK}.tar.gz"
 
-echo -e "Copying backup from Nexus 5 (${TBAK_PATH}) using the name ${BAK_NAME} into the following directory:"
+echo -ne "Copying backup from ${SELECTED_SOURCE} (${TBAK_PATH}) using the name ${BAK_NAME} "
+echo "into the following directory:"
 echo -e "${OUTPUT_DIR}\nWait for a while...\n"
 if [ ${DBG} -eq 1 ] ; then
     tar czvf ${OUTPUT_DIR}/${BAK_NAME} ${TBAK_PATH}
