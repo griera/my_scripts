@@ -30,14 +30,24 @@ OUTPUT_DIR=""
 # destination directory
 function get_subject() {
     case "$1" in
-    'dimarts_16')
-        SUBJECT="SO2"
-        OUTPUT_DIR="$(find ${SUBJECTS_PATH} -name SO2 -type d)/${AUDIOS_DIR}"
+    'dimarts_12')
+        SUBJECT="PEC"
+        OUTPUT_DIR="$(find ${SUBJECTS_PATH} -name ${SUBJECT} -type d)/${AUDIOS_DIR}"
         ;;
 
-    'dilluns_18')
-        SUBJECT="PAP"
-        OUTPUT_DIR="$(find ${SUBJECTS_PATH} -name PAP -type d)/${AUDIOS_DIR}"
+    'dilluns_12')
+        SUBJECT="MP"
+        OUTPUT_DIR="$(find ${SUBJECTS_PATH} -name ${SUBJECT} -type d)/${AUDIOS_DIR}"
+        ;;
+
+    'dijous_12')
+        SUBJECT="MP"
+        OUTPUT_DIR="$(find ${SUBJECTS_PATH} -name ${SUBJECT} -type d)/${AUDIOS_DIR}"
+        ;;
+
+    'divendres_12')
+        SUBJECT="PEC"
+        OUTPUT_DIR="$(find ${SUBJECTS_PATH} -name ${SUBJECT} -type d)/${AUDIOS_DIR}"
         ;;
     esac
 }
