@@ -19,6 +19,11 @@ TEXT_TEST='Test'
 for fgbg in 38 48 ; do
     for color in {0..256} ; do
 
+        # Index of color
+        if [ $((($color) % 10)) == 0 ] ; then
+            echo -en "$color\t|\t"
+        fi
+
         echo -en "\e[${fgbg};5;${color}m ${TEXT_TEST}\t\e[0m"
 
         #Display 10 colors per lines
@@ -26,7 +31,7 @@ for fgbg in 38 48 ; do
             echo
         fi
     done
-    echo
+    echo -e "\n\n"
 done
 
 exit 0
