@@ -46,13 +46,14 @@ if [ $? -ne 0 ] ; then
 fi
 
 # Starting the backup transfer
+echo -e "STARTING BACKUP TRANSFER...\n"
 rsync $RSYNC_OPTS ${SOURCE_IP}::${SOURCE_MODULE} $BAK_DIR
 
-if [ $? -ne 0 ]
+if [ $? -ne 0 ] ; then
     echo -e "\nERROR: Backup has not been transferred successfully due to rsync errors."
     exit 1
 fi
 
-echo -e "\nSUCCESS: Backup has been transferred successfully!"
+echo -e "\nSUCCESS: Backup has been transferred on $BAK_DIR successfully!"
 exit 0
 
