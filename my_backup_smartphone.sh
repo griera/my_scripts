@@ -37,8 +37,11 @@ BAK_DIR="${HOME}/my_links/Smartphones/Nexus_5/TitaniumBackup/"
 RSYNC_PORT=873
 RSYNC_OPTS="--force --ignore-errors --delete -avz --stats"
 
+# Timeout for nc command to check the availability of rsync server
+TIMEOUT=3
+
 # Checks if source is running rsync server on rsync port (873 by default)
-nc -z $SMARTPHONE_IP $RSYNC_PORT
+nc -z -w $TIMEOUT $SMARTPHONE_IP $RSYNC_PORT
 
 if [ $? -ne 0 ] ; then
     echo "The smartphone (${SMARTPHONE_IP}) is not running rsync server on port ${RSYNC_PORT}. Please start rsync on it and execute again the script."
