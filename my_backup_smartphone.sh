@@ -23,31 +23,31 @@ function usage () {
 }
 
 # Checks input parameters
-if [ $# -gt 1 ] ; then
+if [ $# -gt 0 ] ; then
     usage
 fi
 
-SOURCE_IP="192.168.2.102"
+SMARTPHONE_IP="192.168.2.102"
 
 # This module has been configured on smartphone by using Servers Ultimate Pro app.
 # rsync server can be found by installing Servers Pack A
-SOURCE_MODULE="TitaniumBackup"
+SMARTPHONE_MODULE="TitaniumBackup"
 
 BAK_DIR="${HOME}/my_links/Smartphones/Nexus_5/TitaniumBackup/"
 RSYNC_PORT=873
 RSYNC_OPTS="--force --ignore-errors --delete -avz --stats"
 
 # Checks if source is running rsync server on rsync port (873 by default)
-nc -z $SOURCE_IP $RSYNC_PORT
+nc -z $SMARTPHONE_IP $RSYNC_PORT
 
 if [ $? -ne 0 ] ; then
-    echo "Source (${SOURCE_IP}) is not running rsync server on port ${RSYNC_PORT}. Please start rsync on it and execute again the script."
+    echo "The smartphone (${SMARTPHONE_IP}) is not running rsync server on port ${RSYNC_PORT}. Please start rsync on it and execute again the script."
     exit 2
 fi
 
 # Starting the backup transfer
 echo -e "STARTING BACKUP TRANSFER...\n"
-rsync $RSYNC_OPTS ${SOURCE_IP}::${SOURCE_MODULE} $BAK_DIR
+rsync $RSYNC_OPTS ${SMARTPHONE_IP}::${SMARTPHONE_MODULE} $BAK_DIR
 
 if [ $? -ne 0 ] ; then
     echo -e "\nERROR: Backup has not been transferred successfully due to rsync errors."
