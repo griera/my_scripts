@@ -16,18 +16,8 @@
 #                                                                          #
 ############################################################################
 
-function usage () {
-    echo -e "Usage: ${0}\n"
-    echo -e "More information can be found by reading the script file."
-    exit 1
-}
-
-# Checks input parameters
-if [ $# -gt 0 ] ; then
-    usage
-fi
-
-SMARTPHONE_IP="192.168.2.102"
+# Home router starts on .100 to assign IPs for each device connected to the network
+HOME_NETID="192.168.2"
 
 # This module has been configured on smartphone by using Servers Ultimate Pro app.
 # rsync server can be found by installing Servers Pack A
@@ -38,15 +28,42 @@ RSYNC_PORT=873
 RSYNC_OPTS="--force --ignore-errors --delete -avz --stats"
 
 # Timeout for nc command to check the availability of rsync server
-TIMEOUT=3
+TIMEOUT=2
 
-# Checks if source is running rsync server on rsync port (873 by default)
-nc -z -w $TIMEOUT $SMARTPHONE_IP $RSYNC_PORT
+function usage () {
+    echo -e "Usage: ${0}\n"
+    echo -e "More information can be found by reading the script file."
+    exit 1
+}
 
-if [ $? -ne 0 ] ; then
-    echo "The smartphone (${SMARTPHONE_IP}) is not running rsync server on port ${RSYNC_PORT}. Please start rsync on it and execute again the script."
+# Searches which private IP has been assigned to the smartphone by home router
+# and if source is running rsync server on rsync port (873 by default)
+function search_smartphone_ip () {
+    for hostid in $(seq 100 1 254) ; do
+        SMARTPHONE_IP="${HOME_NETID}.${hostid}"
+        nc -z -w $TIMEOUT $SMARTPHONE_IP $RSYNC_PORT
+        if [ $? -eq 0 ] ; then
+            return 0
+        fi
+    done
+    return 2
+}
+
+# Checks input parameters
+if [ $# -gt 0 ] ; then
+    usage
+fi
+
+echo -e "Searching for the smartphone IP assigned in the network...\n"
+search_smartphone_ip
+
+if [ $? -eq 2 ] ; then
+    echo "The smartphone is not running rsync server on port ${RSYNC_PORT} or isn't connected to the same network."
+    echo "Please check if the smartphone is connected to the same network and is running rsync server before executing the script again."
     exit 2
 fi
+
+echo -e "SUCCESS: Smartphone has assigned ${SMARTPHONE_IP}\n"
 
 # Starting the backup transfer
 echo -e "STARTING BACKUP TRANSFER...\n"
