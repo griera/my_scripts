@@ -23,7 +23,7 @@ HOME_NETID="192.168.2"
 # rsync server can be found by installing Servers Pack A
 SMARTPHONE_MODULE="TitaniumBackup"
 
-BAK_DIR="${HOME}/my_links/Smartphones/Nexus_5/TitaniumBackup/"
+BAK_DIR="${HOME}/my_links/Smartphones/Nexus5/TitaniumBackup/"
 RSYNC_PORT=873
 RSYNC_OPTS="--force --ignore-errors --delete -avz --stats"
 
