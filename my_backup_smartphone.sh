@@ -26,7 +26,7 @@ SMARTPHONE_IP="192.168.1.11"
 # rsync server can be found by installing Servers Pack A
 SMARTPHONE_MODULE="TitaniumBackup"
 
-BAK_DIR="${HOME}/my_links/Smartphones/Nexus5/TitaniumBackup/"
+BAK_DIR="${HOME}/my_links/smartphones/Nexus5/TitaniumBackup/"
 RSYNC_PORT=873
 RSYNC_OPTS="--force --ignore-errors --delete -avz --stats"
 
