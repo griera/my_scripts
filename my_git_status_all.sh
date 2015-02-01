@@ -21,7 +21,6 @@ function print_hyphens() {
 }
 
 REPOS_DIR="${HOME}/repos"
-TMP_FILE="/tmp/log.txt"
 REPOS_MOD=""
 for repo in $(ls ${REPOS_DIR}) ; do
     cd ${REPOS_DIR}/${repo}
@@ -32,8 +31,8 @@ for repo in $(ls ${REPOS_DIR}) ; do
     print_hyphens "${MSG}"
     echo ""
 
-    git status | tee /tmp/log.txt
-    grep -wq "nothing to commit (working directory clean)" ${TMP_FILE}
+    git_status="$(git status)"
+    echo $git_status | grep -wq "working directory clean"
 
     if [ $? -ne 0 ] ; then
         REPOS_MOD="${REPOS_MOD} ${repo}"
@@ -41,7 +40,6 @@ for repo in $(ls ${REPOS_DIR}) ; do
     echo -e "\n----------------------------------------------------------------------------------"
     echo -e "----------------------------------------------------------------------------------\n"
 done
-rm ${TMP_FILE}
 
 if [ "x${REPOS_MOD}" = "x" ] ; then
     echo "All your repositories are clean"
