@@ -41,6 +41,7 @@ if [ $1 = "-d" ] ; then
     shift 1
 fi
 
+DROPBOX_DIR="/media/DADES/My_Folder/Dropbox"
 path_to_sync="$1"
 
 # Check if is defined an alternative path to sync the desired file/folder
@@ -51,7 +52,7 @@ if [ "x$2" != "x" ] ; then
 fi
 
 # Check dropbox daemon status
-dropbox_status="$(dropbox status)"
+dropbox_status="$(dropbox.py status)"
 if [ "${dropbox_status}" = "Dropbox isn't running!" ] ; then
     echo "WARNING: ${dropbox_status}"
     echo "${path_to_sync} will not be synched until Dropbox daemon starts."

@@ -20,11 +20,11 @@ function print_hyphens() {
     done
 }
 
-REPOS_PATH="${HOME}/repos"
+REPOS_DIR="${HOME}/repos"
 TMP_FILE="/tmp/log.txt"
 REPOS_MOD=""
-for repo in $(ls ${REPOS_PATH}) ; do
-    cd ${REPOS_PATH}/${repo}
+for repo in $(ls ${REPOS_DIR}) ; do
+    cd ${REPOS_DIR}/${repo}
     MSG="  GIT STATUS OF REPOSITORY ${repo}  "
 
     print_hyphens "${MSG}"
@@ -33,7 +33,7 @@ for repo in $(ls ${REPOS_PATH}) ; do
     echo ""
 
     git status | tee /tmp/log.txt
-    grep -w "nothing to commit (working directory clean)" ${TMP_FILE} &> /dev/null
+    grep -wq "nothing to commit (working directory clean)" ${TMP_FILE}
 
     if [ $? -ne 0 ] ; then
         REPOS_MOD="${REPOS_MOD} ${repo}"
