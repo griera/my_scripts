@@ -28,7 +28,7 @@ function usage () {
 }
 
 # General purpose variable
-DOTFILE_DIR=~/my_dotfiles
+DOTFILE_DIR=~/repos/my_dotfiles
 RECORD_FILE=${DOTFILE_DIR}/dotfiles_record.txt
 
 if [[ $# -eq 0 || $# -gt 2 || ($# -eq 1 && $1 = "-d") ]] ; then
