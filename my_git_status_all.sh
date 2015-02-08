@@ -31,6 +31,7 @@ for repo in $(ls ${REPOS_DIR}) ; do
     print_hyphens "${MSG}"
     echo ""
 
+    git status
     git_status="$(git status)"
     echo $git_status | grep -wq "working directory clean"
 
@@ -44,7 +45,7 @@ done
 if [ "x${REPOS_MOD}" = "x" ] ; then
     echo "All your repositories are clean"
 else
-    echo "The following repositories have changed:"
+    echo "The following repositories are not clean:"
     for i in $(echo ${REPOS_MOD}) ; do
         echo ${i}
     done
